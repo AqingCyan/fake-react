@@ -1,6 +1,7 @@
 import { Props, Key, Ref } from 'shared/ReactTypes';
 import { WorkTag } from './workTags';
 import { Flags, NoFlags } from './fiberFlags';
+import { Container } from 'hostConfig';
 
 export class FiberNode {
 	type: any;
@@ -18,6 +19,7 @@ export class FiberNode {
 	memoizedProps: Props | null;
 	alternate: FiberNode | null; // 用于 FiberNode 切换，current => workInProgress
 	flags: Flags; // 副作用，也就是 FiberNode 标记上的具体行为
+	updateQueue: unknown;
 
 	constructor(tag: WorkTag, pendingProps: Props, key: Key) {
 		// 作为实例
@@ -36,8 +38,22 @@ export class FiberNode {
 		// 作为工作单元
 		this.pendingProps = pendingProps; // 开始准备工作的时候 props 是什么
 		this.memoizedProps = null; // 工作完成时候确定下来的 props 是什么
+		this.updateQueue = null;
 
 		this.alternate = null;
 		this.flags = NoFlags;
+	}
+}
+
+export class FiberRootNode {
+	container: Container; // 宿主环境的 rootElement，对于浏览器环境就是 DOMElement
+	current: FiberNode;
+	finishedWork: FiberNode | null;
+
+	constructor(container: Container, hostRootFiber: FiberNode) {
+		this.container = container;
+		this.current = hostRootFiber;
+		hostRootFiber.stateNode = this;
+		this.finishedWork = null;
 	}
 }
