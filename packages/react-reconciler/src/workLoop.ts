@@ -1,17 +1,47 @@
-import { FiberNode } from './fiber';
+import { createWorkInProgress, FiberNode, FiberRootNode } from './fiber';
 import { beginWork } from './beginWork';
 import { completeWork } from './completeWork';
+import { HostRoot } from './workTags';
 
 /**
  * 需要一个全局的指向正在工作的 FiberNode 的指针
  */
 let workInProgress: FiberNode | null;
 
-const prepareFreshStack = (fiber: FiberNode) => {
-	workInProgress = fiber;
+const prepareFreshStack = (root: FiberRootNode) => {
+	workInProgress = createWorkInProgress(root.current, {});
 };
 
-const renderRoot = (root: FiberNode) => {
+/**
+ * 在 Fiber 中调度 Update
+ */
+export const scheduleUpdateOnFiber = (fiber: FiberNode) => {
+	// TODO: 调度功能
+
+	// fiberRootNode
+	const root = markUpdateFromFiberToRoot(fiber);
+	renderRoot(root);
+};
+
+/**
+ * 从 Fiber 节点遍历到根节点，返回根节点
+ */
+function markUpdateFromFiberToRoot(fiber: FiberNode) {
+	let node = fiber;
+	let parent = node.return;
+	while (parent !== null) {
+		node = parent;
+		parent = node.return;
+	}
+
+	if (node.tag === HostRoot) {
+		return node.stateNode;
+	}
+
+	return null;
+}
+
+function renderRoot(root: FiberRootNode) {
 	// 初始化
 	prepareFreshStack(root);
 
@@ -24,7 +54,7 @@ const renderRoot = (root: FiberNode) => {
 			workInProgress = null;
 		}
 	} while (true);
-};
+}
 
 console.log(renderRoot); // TODO: 为了 commit 暂时打印，后面删除
 
