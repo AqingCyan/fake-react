@@ -27,6 +27,7 @@ export class FiberNode {
 	 */
 	alternate: FiberNode | null; // 用于 FiberNode 切换，current <=> workInProgress
 	flags: Flags; // 副作用，也就是 FiberNode 标记上的具体行为
+	subtreeFlags: Flags; // 子树的副作用
 	updateQueue: unknown;
 
 	constructor(tag: WorkTag, pendingProps: Props, key: Key) {
@@ -51,6 +52,7 @@ export class FiberNode {
 
 		this.alternate = null;
 		this.flags = NoFlags;
+		this.subtreeFlags = NoFlags;
 	}
 }
 
@@ -91,6 +93,7 @@ export const createWorkInProgress = (
 		// update 阶段：复用已存在的 WorkInProgress 节点
 		wip.pendingProps = pendingProps;
 		wip.flags = NoFlags; // 清理上次更新的副作用，因为这个副作用可能是从上一次更新来的
+		wip.subtreeFlags = NoFlags;
 	}
 
 	// 复制必要的属性

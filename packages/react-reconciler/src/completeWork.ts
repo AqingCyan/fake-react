@@ -5,6 +5,7 @@ import {
 	createInstance,
 	createTextInstance
 } from 'hostConfig';
+import { NoFlags } from './fiberFlags';
 
 // 递归中的“归”阶段
 // 对于 Host 类型的 fiberNode，需要构建离屏的 DOM 树
@@ -25,6 +26,7 @@ export const completeWork = (wip: FiberNode): FiberNode | null => {
 				appendAllChildren(instance, wip);
 				wip.stateNode = instance;
 			}
+			bubbleProperties(wip);
 			return null;
 		// 1. 构建 DOM；2. 将 DOM 插入到 DOM 树中
 		case HostText:
@@ -35,8 +37,10 @@ export const completeWork = (wip: FiberNode): FiberNode | null => {
 				// 1. 构建 DOM；2. 将 DOM 插入到 DOM 树中
 				wip.stateNode = createTextInstance(newProps.content);
 			}
+			bubbleProperties(wip);
 			return null;
 		case HostRoot:
+			bubbleProperties(wip);
 			return null;
 		default:
 			if (__DEV__) {
@@ -73,4 +77,19 @@ function appendAllChildren(parent: FiberNode, wip: FiberNode) {
 		node.sibling.return = node.return;
 		node = node.sibling;
 	}
+}
+
+function bubbleProperties(wip: FiberNode) {
+	let subtreeFlags = NoFlags;
+	let child = wip.child;
+
+	while (child !== null) {
+		subtreeFlags |= child.subtreeFlags;
+		subtreeFlags |= child.flags;
+
+		child.return = wip;
+		child = child.sibling;
+	}
+
+	wip.subtreeFlags |= subtreeFlags;
 }

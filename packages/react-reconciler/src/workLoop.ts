@@ -56,6 +56,11 @@ function renderRoot(root: FiberRootNode) {
 			workInProgress = null;
 		}
 	} while (true);
+
+	root.finishedWork = root.current.alternate;
+
+	// 根据 wip fiberNode 树中的 flags 确定是否 commit，来完成渲染
+	// commitRoot(root)
 }
 
 console.log(renderRoot); // TODO: 为了 git commit 暂时打印，后面删除
