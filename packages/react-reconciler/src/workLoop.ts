@@ -56,7 +56,7 @@ function renderRoot(root: FiberRootNode) {
 	} while (true);
 }
 
-console.log(renderRoot); // TODO: 为了 commit 暂时打印，后面删除
+console.log(renderRoot); // TODO: 为了 git commit 暂时打印，后面删除
 
 function workLoop() {
 	while (workInProgress !== null) {

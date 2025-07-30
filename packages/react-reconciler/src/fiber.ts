@@ -46,7 +46,7 @@ export class FiberNode {
 		// 作为工作单元
 		this.pendingProps = pendingProps; // 开始准备工作的时候 props 是什么
 		this.memoizedProps = null; // 工作完成时候确定下来的 props 是什么
-		this.memoizedState = null;
+		this.memoizedState = null; // 工作完成时候确定下来的 state 是什么
 		this.updateQueue = null;
 
 		this.alternate = null;
