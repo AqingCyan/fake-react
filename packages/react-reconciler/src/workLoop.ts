@@ -29,8 +29,13 @@ const prepareFreshStack = (root: FiberRootNode) => {
 };
 
 /**
- * 在 Fiber 中调度 Update
- * 这是更新的入口函数，当组件调用 setState 时会触发
+ * React 更新调度的统一入口函数
+ * 触发场景包括：
+ * - 首次渲染 (mount): root.render(<App />)
+ * - 状态更新 (update): setState、useState setter
+ * - Props 更新: 父组件重新渲染
+ * - 强制更新: forceUpdate
+ * - Context 更新等
  * @param fiber 触发更新的 Fiber 节点
  */
 export const scheduleUpdateOnFiber = (fiber: FiberNode) => {
