@@ -2,6 +2,8 @@ import { beginWork } from './beginWork';
 import { completeWork } from './completeWork';
 import { createWorkInProgress, FiberNode, FiberRootNode } from './fiber';
 import { HostRoot } from './workTags';
+import { MutationMask, NoFlags } from './fiberFlags';
+import { commitMutationEffects } from './commitWork';
 
 /**
  * 整体工作流程
@@ -93,7 +95,44 @@ function renderRoot(root: FiberRootNode) {
 	root.finishedWork = root.current.alternate;
 
 	// 根据 wip fiberNode 树中的 flags 确定是否 commit，来完成渲染
-	// commitRoot(root)
+	commitRoot(root);
+}
+
+/**
+ * 提交根节点，完成渲染
+ * @param root
+ */
+function commitRoot(root: FiberRootNode) {
+	const finishedWork = root.finishedWork;
+
+	if (finishedWork === null) {
+		return;
+	}
+
+	if (__DEV__) {
+		console.warn('commit 阶段开始', finishedWork);
+	}
+
+	// 重置
+	root.finishedWork = null;
+
+	// 判断是否存在 3 个直接点需要执行的操作
+	const subtreeHasEffect =
+		(finishedWork.subtreeFlags & MutationMask) !== NoFlags;
+	const rootHasEffect = (finishedWork.flags & MutationMask) !== NoFlags;
+
+	if (subtreeHasEffect || rootHasEffect) {
+		// 1. beforeMutation 阶段
+		// 2. mutation 阶段：主要是 Placement 操作
+		commitMutationEffects(finishedWork);
+
+		// 在 mutation 阶段到 layout 阶段之间，会完成 fiber 树的切换
+		root.current = finishedWork;
+
+		// 3. layout 阶段
+	} else {
+		root.current = finishedWork;
+	}
 }
 
 /**
