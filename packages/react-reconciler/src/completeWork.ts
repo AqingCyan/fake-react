@@ -1,5 +1,6 @@
 import {
 	appendInitialChild,
+	Container,
 	createInstance,
 	createTextInstance
 } from 'hostConfig';
@@ -81,7 +82,7 @@ export const completeWork = (wip: FiberNode): FiberNode | null => {
  * @param wip 当前正在处理的 Fiber 节点
  * @returns
  */
-function appendAllChildren(parent: FiberNode, wip: FiberNode) {
+function appendAllChildren(parent: Container, wip: FiberNode) {
 	// 1. 从第一个子节点开始
 	let node = wip.child;
 

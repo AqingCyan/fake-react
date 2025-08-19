@@ -1,42 +1,43 @@
 {
-  "name": "fake-react",
-  "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
-  "scripts": {
-    "lint": "eslint --ext .ts,.jsx,.tsx --fix --quiet ./packages",
-    "build:dev": "rimraf dist && rollup --bundleConfigAsCjs --config scripts/rollup/react.config.js",
-    "prepare": "husky"
-  },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "packageManager": "pnpm@10.13.1",
-  "devDependencies": {
-    "@commitlint/cli": "^19.8.1",
-    "@commitlint/config-conventional": "^19.8.1",
-    "@eslint/css": "^0.10.0",
-    "@eslint/js": "^9.32.0",
-    "@eslint/json": "^0.13.1",
-    "@eslint/markdown": "^7.1.0",
-    "@rollup/plugin-commonjs": "^28.0.6",
-    "@typescript-eslint/eslint-plugin": "^8.38.0",
-    "commitlint": "^19.8.1",
-    "eslint": "^8.57.0",
-    "eslint-config-prettier": "^10.1.8",
-    "eslint-plugin-prettier": "^5.5.3",
-    "globals": "^16.3.0",
-    "husky": "^9.1.7",
-    "jiti": "^2.5.1",
-    "prettier": "^3.6.2",
-    "rimraf": "^6.0.1",
-    "rollup": "^4.45.1",
-    "rollup-plugin-generate-package-json": "^3.2.0",
-    "rollup-plugin-typescript2": "^0.36.0",
-    "typescript": "~5.5.4",
-    "typescript-eslint": "^7.15.0"
-  },
-  "dependencies": {
-    "@rollup/plugin-replace": "^6.0.2"
-  }
+	"name": "fake-react",
+	"version": "1.0.0",
+	"description": "",
+	"main": "index.js",
+	"scripts": {
+		"lint": "eslint --ext .ts,.jsx,.tsx --fix --quiet ./packages",
+		"build:dev": "rimraf dist && rollup --bundleConfigAsCjs --config scripts/rollup/dev.config.js",
+		"prepare": "husky"
+	},
+	"keywords": [],
+	"author": "",
+	"license": "ISC",
+	"packageManager": "pnpm@10.13.1",
+	"devDependencies": {
+		"@commitlint/cli": "^19.8.1",
+		"@commitlint/config-conventional": "^19.8.1",
+		"@eslint/css": "^0.10.0",
+		"@eslint/js": "^9.32.0",
+		"@eslint/json": "^0.13.1",
+		"@eslint/markdown": "^7.1.0",
+		"@rollup/plugin-alias": "^5.1.1",
+		"@rollup/plugin-commonjs": "^28.0.6",
+		"@typescript-eslint/eslint-plugin": "^8.38.0",
+		"commitlint": "^19.8.1",
+		"eslint": "^8.57.0",
+		"eslint-config-prettier": "^10.1.8",
+		"eslint-plugin-prettier": "^5.5.3",
+		"globals": "^16.3.0",
+		"husky": "^9.1.7",
+		"jiti": "^2.5.1",
+		"prettier": "^3.6.2",
+		"rimraf": "^6.0.1",
+		"rollup": "^4.45.1",
+		"rollup-plugin-generate-package-json": "^3.2.0",
+		"rollup-plugin-typescript2": "^0.36.0",
+		"typescript": "~5.5.4",
+		"typescript-eslint": "^7.15.0"
+	},
+	"dependencies": {
+		"@rollup/plugin-replace": "^6.0.2"
+	}
 }

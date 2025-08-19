@@ -24,7 +24,6 @@ export const commitMutationEffects = (finishedWork: FiberNode) => {
 			nextEffect = child;
 		} else {
 			// 向上遍历
-			nextEffect = nextEffect.sibling;
 			up: while (nextEffect !== null) {
 				commitMutationEffectsOnFiber(nextEffect);
 
@@ -60,14 +59,16 @@ function commitPlacement(finishedWork: FiberNode) {
 	const hostParent = getHostParent(finishedWork);
 
 	// 找到对应的 DOM，插入到父级中
-	appendPlacementNodeIntoContainer(finishedWork, hostParent);
+	if (hostParent !== null) {
+		appendPlacementNodeIntoContainer(finishedWork, hostParent);
+	}
 }
 
 /**
  * 获得父级的宿主环境节点
  * @param fiber
  */
-function getHostParent(fiber: FiberNode): Container {
+function getHostParent(fiber: FiberNode): Container | null {
 	let parent = fiber.return;
 	while (parent) {
 		const parentTag = parent.tag;
@@ -84,6 +85,8 @@ function getHostParent(fiber: FiberNode): Container {
 	if (__DEV__) {
 		console.warn('getHostParent 没有找到 HostParent');
 	}
+
+	return null;
 }
 
 /**
@@ -96,7 +99,7 @@ function appendPlacementNodeIntoContainer(
 	hostParent: Container
 ) {
 	if (finishedWork.tag === HostComponent || finishedWork.tag === HostText) {
-		appendChildToContainer(finishedWork.stateNode, hostParent);
+		appendChildToContainer(hostParent, finishedWork.stateNode);
 		return;
 	}
 
