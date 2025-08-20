@@ -6,7 +6,12 @@ import {
 } from 'hostConfig';
 import { FiberNode } from './fiber';
 import { NoFlags } from './fiberFlags';
-import { HostComponent, HostRoot, HostText } from './workTags';
+import {
+	FunctionComponent,
+	HostComponent,
+	HostRoot,
+	HostText
+} from './workTags';
 
 /**
  * 负责 React 协调过程中的"归"阶段（向上回溯），主要工作是：
@@ -62,6 +67,10 @@ export const completeWork = (wip: FiberNode): FiberNode | null => {
 			return null;
 		case HostRoot:
 			// 根节点不需要创建 DOM（container 已经存在），只需要冒泡子节点的副作用标记
+			bubbleProperties(wip);
+			return null;
+		case FunctionComponent:
+			// 冒泡子节点的副作用标记
 			bubbleProperties(wip);
 			return null;
 		default:

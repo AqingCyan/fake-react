@@ -2,7 +2,13 @@ import { ReactElementType } from 'shared/ReactTypes';
 import { mountChildFibers, reconcileChildFibers } from './childFibers';
 import { FiberNode } from './fiber';
 import { processUpdateQueue, UpdateQueue } from './updateQueue';
-import { HostComponent, HostRoot, HostText } from './workTags';
+import {
+	FunctionComponent,
+	HostComponent,
+	HostRoot,
+	HostText
+} from './workTags';
+import { renderWithHooks } from './fiberHooks';
 
 /**
  * 递归中的“递”阶段：根据 Fiber 节点的类型（tag）分派到不同的处理函数
@@ -26,6 +32,9 @@ export const beginWork = (wip: FiberNode): FiberNode | null => {
 		// 文本节点：没有 beginWork 流程，因为它没有子节点
 		case HostText:
 			return null;
+		// 函数组件 TODO: 补充注释
+		case FunctionComponent:
+			return updateFunctionComponent(wip);
 		default:
 			if (__DEV__) {
 				console.warn('beginWork 未实现的类型', wip.tag);
@@ -33,6 +42,18 @@ export const beginWork = (wip: FiberNode): FiberNode | null => {
 			return null;
 	}
 };
+
+/**
+ * 更新函数组件
+ * @param wip
+ */
+function updateFunctionComponent(wip: FiberNode) {
+	// 1. 渲染函数组件，获取子节点
+	const nextChildren = renderWithHooks(wip);
+	// 2. 协调子节点：比较新旧子节点，生成新的子 Fiber
+	reconcileChildren(wip, nextChildren);
+	return wip.child;
+}
 
 /**
  * 处理根节点

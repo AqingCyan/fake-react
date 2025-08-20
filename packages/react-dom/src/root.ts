@@ -1,4 +1,4 @@
-import { Container } from './hostConfig';
+import { Container } from 'hostConfig';
 import {
 	createContainer,
 	updateContainer
