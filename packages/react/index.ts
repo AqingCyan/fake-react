@@ -1,6 +1,6 @@
-import { jsxDEV } from './src/jsx';
 import currentDispatcher from './src/currentDispatcher';
 import { Dispatcher, resolveDispatcher } from './src/currentDispatcher';
+import { jsx, isValidElement as isValidElementFn } from './src/jsx';
 
 export const useState: Dispatcher['useState'] = (initialState) => {
 	const dispatcher = resolveDispatcher();
@@ -12,8 +12,6 @@ export const __SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED = {
 	currentDispatcher
 };
 
-// React
-export default {
-	version: '1.0.0',
-	createElement: jsxDEV
-};
+export const version = '0.0.0';
+export const createElement = jsx; // TODO: 根据环境区分使用 jsx or jsxDEV
+export const isValidElement = isValidElementFn;
